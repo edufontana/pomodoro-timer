@@ -7,7 +7,7 @@ interface ButtonProps{
 }
 
 export const ButtonContainer = styled.button<ButtonProps>`
-  background-color: ${props => props.theme.secondary};
+  background-color: ${({theme})=> theme.secondary };
   height: 11rem;
   width: 11rem;
 `
