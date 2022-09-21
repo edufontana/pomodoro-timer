@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const HomeContainer = styled.main`
-  background-color: red;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -10,7 +9,6 @@ export const HomeContainer = styled.main`
 
   form {
     display: flex;
-    background-color: green;
     flex-direction: column;
     align-items: center;
     gap: 3.5rem;
@@ -18,7 +16,6 @@ export const HomeContainer = styled.main`
 `
 
 export const FormContainer = styled.div`
-  background-color: blue;
   width: 100%;
   display: flex;
   align-items: center;
@@ -33,7 +30,6 @@ export const FormContainer = styled.div`
 export const CountdownContainer = styled.div`
   font-family: 'Roboto Mono', monospace;
   font-size: 10rem;
-  background-color: orange;
   line-height: 8rem;
   color: ${({ theme }) => theme['gray-100']};
 
@@ -48,11 +44,63 @@ export const CountdownContainer = styled.div`
 `
 
 export const Separator = styled.div`
-  background-color: pink;
   padding: 2rem 0;
   color: ${({ theme }) => theme['green-500']};
   width: 4rem;
   overflow: hidden;
   display: flex;
   justify-content: center;
+`
+export const StartCountdownButton = styled.button`
+  border: 0;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  background-color: ${({ theme }) => theme['green-500']};
+  color: ${({ theme }) => theme['gray-100']};
+
+  &:not(:disabled):hover {
+    background-color: ${({ theme }) => theme['green-700']};
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`
+const BaseInput = styled.input`
+  background: transparent;
+  display: flex;
+  height: 2.5rem;
+  border: 0;
+  border-bottom: 2px solid ${({ theme }) => theme['gray-500']};
+  font-size: 1.125rem;
+  padding: 0 0.5rem;
+  font-weight: bold;
+
+  &:focus {
+    box-shadow: none;
+    border-color: ${({ theme }) => theme['green-500']};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme['gray-500']};
+  }
+`
+
+export const TaskInput = styled(BaseInput)`
+  flex: 1;
+`
+
+export const MinutesAmountInput = styled(BaseInput)`
+  width: 4rem;
 `
