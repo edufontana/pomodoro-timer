@@ -24,7 +24,7 @@ const newCycleFormSchema = zod.object({
 })
 
 export function Home() {
-  const { register, handleSubmit, watch } = useForm<newCycleFormData>({
+  const { register, handleSubmit, watch, reset } = useForm<newCycleFormData>({
     resolver: zodResolver(newCycleFormSchema),
     defaultValues: {
       task: '',
@@ -34,6 +34,7 @@ export function Home() {
 
   function handleCreateNewCycle(data: newCycleFormData) {
     console.log(data)
+    reset()
   }
 
   const task = watch('task')
