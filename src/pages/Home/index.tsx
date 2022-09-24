@@ -18,12 +18,21 @@ interface newCycleFormData {
   minutesAmount: number
 }
 
+interface Cycle {
+  id: string
+  task: string
+  minutesAmount: number
+}
+
 const newCycleFormSchema = zod.object({
   task: zod.string().min(1, 'informe a tarefa'),
   minutesAmount: zod.number().min(5).max(60),
 })
 
 export function Home() {
+  const [cycles, setCycles] = useState<Cycle[]>([])
+  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
+
   const { register, handleSubmit, watch, reset } = useForm<newCycleFormData>({
     resolver: zodResolver(newCycleFormSchema),
     defaultValues: {
@@ -32,8 +41,20 @@ export function Home() {
     },
   })
 
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+
+  console.log(activeCycle)
+
   function handleCreateNewCycle(data: newCycleFormData) {
-    console.log(data)
+    const newCycle: Cycle = {
+      id: String(new Date().getTime()),
+      task: data.task,
+      minutesAmount: data.minutesAmount,
+    }
+
+    setCycles((state) => [...state, newCycle])
+    setActiveCycleId(newCycle.id)
+
     reset()
   }
 
