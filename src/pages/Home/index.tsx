@@ -47,12 +47,18 @@ export function Home() {
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   useEffect(() => {
+    let interval: any
+
     if (activeCycle) {
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSecondsPassed(
           differenceInSeconds(new Date(), activeCycle.startDate),
         )
       }, 1000)
+    }
+
+    return () => {
+      clearInterval(interval)
     }
   }, [activeCycle])
 
@@ -77,6 +83,7 @@ export function Home() {
 
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(newCycle.id)
+    setAmountSecondsPassed(0)
 
     reset()
   }
