@@ -26,6 +26,7 @@ interface Cycle {
   minutesAmount: number
   startDate: Date
   interruptedDate?: Date
+  finishedDate?: Date
 }
 
 const newCycleFormSchema = zod.object({
@@ -47,24 +48,43 @@ export function Home() {
   })
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
   useEffect(() => {
     let interval: any
 
     if (activeCycle) {
       interval = setInterval(() => {
-        setAmountSecondsPassed(
-          differenceInSeconds(new Date(), activeCycle.startDate),
+        const secondsDifference = differenceInSeconds(
+          new Date(),
+          activeCycle.startDate,
         )
+
+        if (secondsDifference >= totalSeconds) {
+          setCycles((state) =>
+            state.map((item) => {
+              if (item.id === activeCycleId) {
+                return { ...item, finishedDate: new Date() }
+              } else {
+                return item
+              }
+            }),
+          )
+          setAmountSecondsPassed(totalSeconds)
+
+          clearInterval(interval)
+        } else {
+          setAmountSecondsPassed(
+            differenceInSeconds(new Date(), activeCycle.startDate),
+          )
+        }
       }, 1000)
     }
 
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle])
+  }, [activeCycle, totalSeconds, activeCycleId])
 
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
 
   const minutesAmount = Math.floor(currentSeconds / 60)
@@ -93,8 +113,8 @@ export function Home() {
   function handleInterruptCycle() {
     setActiveCycleId(null)
 
-    setCycles(
-      cycles.map((item) => {
+    setCycles((state) =>
+      state.map((item) => {
         if (item.id === activeCycleId) {
           return { ...item, interruptedDate: new Date() }
         } else {
