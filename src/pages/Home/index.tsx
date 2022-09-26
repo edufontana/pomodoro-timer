@@ -12,6 +12,7 @@ import {
   StartCountdownButton,
   TaskInput,
   MinutesAmountInput,
+  StopCountdownButton,
 } from './styles'
 
 interface newCycleFormData {
@@ -24,6 +25,7 @@ interface Cycle {
   task: string
   minutesAmount: number
   startDate: Date
+  interruptedDate?: Date
 }
 
 const newCycleFormSchema = zod.object({
@@ -88,6 +90,20 @@ export function Home() {
     reset()
   }
 
+  function handleInterruptCycle() {
+    setActiveCycleId(null)
+
+    setCycles(
+      cycles.map((item) => {
+        if (item.id === activeCycleId) {
+          return { ...item, interruptedDate: new Date() }
+        } else {
+          return item
+        }
+      }),
+    )
+  }
+
   const task = watch('task')
   const isSubmitDisabled = !task
 
@@ -100,6 +116,7 @@ export function Home() {
             id="task"
             list="task-suggestions"
             placeholder="Dê um nome para o seu projeto"
+            disabled={!!activeCycle}
             {...register('task')}
           />
 
@@ -118,6 +135,7 @@ export function Home() {
             step={5}
             min={5}
             max={60}
+            disabled={!!activeCycle}
             {...register('minutesAmount', { valueAsNumber: true })}
           />
 
@@ -131,10 +149,22 @@ export function Home() {
           <span>{seconds[1]}</span>
         </CountdownContainer>
 
-        <StartCountdownButton disabled={isSubmitDisabled} type="submit">
-          <Play size={24} />
-          começar
-        </StartCountdownButton>
+        {activeCycle ? (
+          <StopCountdownButton
+            onClick={() => {
+              handleInterruptCycle()
+            }}
+            type="button"
+          >
+            <Play size={24} />
+            Interromper
+          </StopCountdownButton>
+        ) : (
+          <StartCountdownButton disabled={isSubmitDisabled} type="submit">
+            <Play size={24} />
+            começar
+          </StartCountdownButton>
+        )}
       </form>
     </HomeContainer>
   )
