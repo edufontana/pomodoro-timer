@@ -3,7 +3,7 @@ import * as zod from 'zod'
 import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext } from 'react'
-import { CycleContext } from '../..'
+import { CycleContext } from '../../../../context/CyclesContexts'
 
 export function NewCycleForm() {
   const { activeCycle } = useContext(CycleContext)
