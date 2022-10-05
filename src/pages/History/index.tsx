@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { CycleContext } from '../../context/CyclesContexts'
 import { HistoryContainer, HistoryList, Status } from './styles'
 
 export function History() {
