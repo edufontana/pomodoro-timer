@@ -1,4 +1,10 @@
-import React, { createContext, ReactNode, useReducer, useState } from 'react'
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react'
 import {
   ActionTypes,
   addNewCycleAction,
@@ -37,6 +43,12 @@ export function CycleContextProvider({ children }: CyclesContextProviderProps) {
   const { activeCycleId, cycles } = cyclesState
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+
+  useEffect(() => {
+    const stateJSON = JSON.stringify(cyclesState)
+
+    localStorage.setItem('@pomodoro:cycle-state-1.0.0', stateJSON)
+  }, [cyclesState])
 
   function setSecondsPassed(seconds: number) {
     setAmountSecondsPassed(seconds)
